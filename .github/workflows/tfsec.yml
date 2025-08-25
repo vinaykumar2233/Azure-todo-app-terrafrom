@@ -3,36 +3,58 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: tfsec
+# name: tfsec
 
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+#   # schedule:
+#   #   - cron: '22 22 * * 0'
+
+# jobs:
+#   tfsec:
+#     name: Run tfsec sarif report
+#     runs-on: ubuntu-latest
+#     permissions:
+#       actions: read
+#       contents: read
+#       security-events: write
+
+#     steps:
+#       - name: Clone repo
+#         uses: actions/checkout@v4
+
+#       - name: Run tfsec
+#         uses: aquasecurity/tfsec-sarif-action@21ded20e8ca120cd9d3d6ab04ef746477542a608
+#         with:
+#           sarif_file: tfsec.sarif
+
+#       - name: Upload SARIF file
+#         uses: github/codeql-action/upload-sarif@v3
+#         with:
+#           # Path to SARIF file relative to the root of the repository
+#           sarif_file: tfsec.sarif
+     
+name: Checkov
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  # schedule:
-  #   - cron: '22 22 * * 0'
-
+    branches:
+      - master
 jobs:
-  tfsec:
-    name: Run tfsec sarif report
+  build:
+
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
     steps:
-      - name: Clone repo
-        uses: actions/checkout@v4
-
-      - name: Run tfsec
-        uses: aquasecurity/tfsec-sarif-action@21ded20e8ca120cd9d3d6ab04ef746477542a608
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
         with:
-          sarif_file: tfsec.sarif
-
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
+          python-version: 3.8
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
         with:
-          # Path to SARIF file relative to the root of the repository
-          sarif_file: tfsec.sarif
+          directory: example/examplea
+          framework: terraform 

@@ -1,0 +1,12 @@
+name: terraform-pipeline
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  terraform-job:
+    runs-on: self-hosted-runner
+    steps:
+      - name: checkout
+        uses: actions/checkout@5.0.0
+   

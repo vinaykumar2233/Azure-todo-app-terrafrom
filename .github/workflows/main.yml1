@@ -1,8 +1,7 @@
 name: terraform-pipeline
-on: 
-  push:
-    branches:
-      - main
+on:
+  workflow_dispatch
+
 jobs:
   terraform-job:
     runs-on: self-hosted-runner
